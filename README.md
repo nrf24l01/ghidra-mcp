@@ -165,6 +165,19 @@ Most Ghidra MCP implementations give you a handful of read-only tools and call i
 python bridge_mcp_ghidra.py
 ```
 
+The Python bridge reads the Ghidra server URL from the `GHIDRA_SERVER_URL` environment variable by default. If unset, it falls back to `http://127.0.0.1:8089`.
+
+```bash
+export GHIDRA_SERVER_URL=http://127.0.0.1:8090
+python bridge_mcp_ghidra.py
+```
+
+You can still override the environment value explicitly with `--ghidra-server`:
+
+```bash
+python bridge_mcp_ghidra.py --ghidra-server http://127.0.0.1:8089
+```
+
 #### Option 2: SSE Transport (Web/HTTP clients)
 ```bash
 python bridge_mcp_ghidra.py --transport sse --mcp-host 127.0.0.1 --mcp-port 8081

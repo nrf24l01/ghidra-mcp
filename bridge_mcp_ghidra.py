@@ -3808,8 +3808,11 @@ def main():
     parser.add_argument(
         "--ghidra-server",
         type=str,
-        default=DEFAULT_GHIDRA_SERVER,
-        help=f"Ghidra server URL, default: {DEFAULT_GHIDRA_SERVER}",
+        default=None,
+        help=(
+            "Ghidra server URL, defaults to GHIDRA_SERVER_URL from the environment "
+            f"or {DEFAULT_GHIDRA_SERVER}"
+        ),
     )
     parser.add_argument(
         "--mcp-host",
@@ -3838,7 +3841,7 @@ def main():
     args = parser.parse_args()
 
     global ghidra_server_url
-    if args.ghidra_server:
+    if args.ghidra_server is not None:
         ghidra_server_url = args.ghidra_server
 
     # Dynamic tool registration from Ghidra's /mcp/schema
