@@ -354,20 +354,12 @@ FUNCTION_NAME_PATTERN = re.compile(r"^[a-zA-Z_][a-zA-Z0-9_]*$")
 
 
 def validate_server_url(url: str) -> bool:
-    """Validate that the server URL is safe to use"""
+    """Validate that the server URL uses an allowed scheme and has a host."""
     try:
         parsed = urlparse(url)
         if parsed.scheme not in ["http", "https"]:
             return False
-        if parsed.hostname in ["localhost", "127.0.0.1", "::1"]:
-            return True
-        if parsed.hostname and (
-            parsed.hostname.startswith("192.168.")
-            or parsed.hostname.startswith("10.")
-            or parsed.hostname.startswith("172.")
-        ):
-            return True
-        return False
+        return bool(parsed.hostname)
     except Exception:
         return False
 

@@ -59,7 +59,7 @@ class TestAddressValidation:
 
 
 class TestServerUrlValidation:
-    """Tests for server URL validation (security)."""
+    """Tests for server URL validation."""
 
     def test_validate_localhost(self):
         """Localhost URLs should be valid."""
@@ -77,12 +77,13 @@ class TestServerUrlValidation:
         assert validate_server_url("http://10.0.0.1:8089/") is True
         assert validate_server_url("http://172.16.0.1:8089/") is True
 
-    def test_reject_public_urls(self):
-        """Public URLs should be rejected for security."""
+    def test_validate_named_hosts_and_public_urls(self):
+        """Any HTTP(S) URL with a host should be valid."""
         from bridge_mcp_ghidra import validate_server_url
 
-        assert validate_server_url("http://example.com:8089/") is False
-        assert validate_server_url("http://8.8.8.8:8089/") is False
+        assert validate_server_url("http://example.com:8089/") is True
+        assert validate_server_url("http://8.8.8.8:8089/") is True
+        assert validate_server_url("http://ghidra-mcp:8089/") is True
 
     def test_reject_invalid_protocols(self):
         """Non-HTTP protocols should be rejected."""
@@ -90,6 +91,12 @@ class TestServerUrlValidation:
 
         assert validate_server_url("ftp://localhost:21/") is False
         assert validate_server_url("file:///etc/passwd") is False
+
+    def test_reject_missing_host(self):
+        """URLs without a host should be rejected."""
+        from bridge_mcp_ghidra import validate_server_url
+
+        assert validate_server_url("http:///missing-host") is False
 
 
 class TestTimeoutCalculation:
